@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="format-detection" content="telephone=no">
+    <title data-i18n="pageTitle">Maria i Pep - 18 d'octubre de 2026</title>
+    <link rel="icon" type="image/png" href="Logo_Color.png">
+    <link rel="shortcut icon" type="image/png" href="Logo_Color.png">
+    <link rel="apple-touch-icon" href="Logo_Color.png">
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Montserrat:wght@300;400;500;600&family=Dancing+Script:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <a href="#hero">
+                    <img src="Logo_Blanco.png" alt="M&P" class="logo-img" id="headerLogo">
+                </a>
+            </div>
+            <div class="header-actions">
+                <button type="button" class="lang-toggle" id="langToggle" aria-label="Canviar idioma">
+                    <span class="lang-flag" id="langToggleFlag" aria-hidden="true"></span>
+                    <span class="sr-only" id="langToggleLabel">Canviar a portuguès</span>
+                </button>
+                <nav class="nav">
+                    <button class="menu-toggle" id="menuToggle" aria-label="Menú">
+                        <div class="hamburger">
+                            <span class="line"></span>
+                            <span class="line"></span>
+                            <span class="line"></span>
+                        </div>
+                    </button>
+                    <ul class="nav-menu" id="navMenu">
+                        <li><a href="#hero" data-i18n="nav.wedding">El casament</a></li>
+                        <li><a href="#nuestro-dia" data-i18n="nav.ourDay">El nostre dia</a></li>
+                        <li><a href="#horarios" data-i18n="nav.schedule">Horaris</a></li>
+                        <li><a href="#asistencia" data-i18n="nav.rsvp">Assistència</a></li>
+                        <li><a href="#regalo" data-i18n="nav.gift">Regal</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero" id="hero">
+        <div class="hero-image">
+            <img src="Portada.jpg" alt="Maria i Pep" class="hero-img" id="heroImg">
+        </div>
+    </section>
+
+    <!-- Calendari Section -->
+    <section class="calendari-section">
+        <div class="calendari-container">
+            <div class="calendari-wrapper">
+                <img src="Calendari.jpg" alt="Calendari — 18 d'octubre de 2026" class="calendari-img" width="6377" height="642" data-i18n-alt="calendariAlt">
+            </div>
+        </div>
+    </section>
+
+    <!-- Wedding Details -->
+    <section class="wedding-details" id="nuestro-dia">
+        <div class="container">
+            <div class="ceremony">
+                <div class="ceremony-image">
+                    <img src="Iglesia.jpeg" alt="Santuari de la Mare de Déu de la Misericòrdia" class="venue-img">
+                </div>
+                <h2 data-i18n="ceremony.title">Cerimònia</h2>
+                <div class="time">12:30 h</div>
+                <div class="location">
+                    <span data-i18n="ceremony.locationLine1">Santuari de la Mare de Déu</span><br>
+                    <span data-i18n="ceremony.locationLine2">de la Misericòrdia</span>
+                </div>
+                <div class="address">Canet de Mar, Barcelona</div>
+                <a href="https://maps.app.goo.gl/G3sk85iWADjgpogj8?g_st=iw" target="_blank" rel="noopener noreferrer" class="directions-btn" data-i18n="directions">Com arribar-hi</a>
+            </div>
+            
+            <div class="celebration">
+                <div class="celebration-image">
+                    <img src="Celebracion.jpg" alt="Turó del Sol" class="venue-img">
+                </div>
+                <h2 data-i18n="celebration.title">Celebració</h2>
+                <div class="time">14:00 h</div>
+                <div class="location">
+                    <span data-i18n="celebration.locationLine1">Turó</span><br>
+                    <span data-i18n="celebration.locationLine2">del Sol</span>
+                </div>
+                <div class="address">Sant Vicenç de Montalt, Barcelona</div>
+                <a href="https://maps.app.goo.gl/9egafYdaZCyoTXjR6?g_st=iw" target="_blank" rel="noopener noreferrer" class="directions-btn" data-i18n="directions">Com arribar-hi</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Schedule -->
+    <section class="schedule" id="horarios">
+        <div class="container">
+            <h2 data-i18n="schedule.title">Horaris</h2>
+            <div class="schedule-grid">
+                <div class="schedule-item">
+                    <div class="schedule-icon">
+                        <img src="Ceremonia.png" alt="" class="icon-img" aria-hidden="true">
+                    </div>
+                    <h3 data-i18n="ceremony.title">Cerimònia</h3>
+                    <div class="time">12:30 h</div>
+                </div>
+                <div class="schedule-item">
+                    <div class="schedule-icon">
+                        <img src="Celebracion-icon.png" alt="" class="icon-img" aria-hidden="true">
+                    </div>
+                    <h3 data-i18n="celebration.title">Celebració</h3>
+                    <div class="time">14:00 h</div>
+                </div>
+                <div class="schedule-item">
+                    <div class="schedule-icon">
+                        <img src="Cierre.png" alt="" class="icon-img" aria-hidden="true">
+                    </div>
+                    <h3 data-i18n="schedule.closing">Tancament</h3>
+                    <div class="time-closing">
+                        <span class="time-main">21 h</span>
+                        <span class="time-note" data-i18n="schedule.closingApprox">aproximadament</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- RSVP Form -->
+    <section class="rsvp" id="asistencia">
+        <div class="container">
+            <h2 data-i18n="rsvp.title">Confirma la teva assistència</h2>
+            <form class="rsvp-form" id="rsvpForm">
+                <div class="form-group">
+                    <label for="nombre" data-i18n="rsvp.name">Nom*</label>
+                    <input type="text" id="nombre" name="nombre" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="apellidos" data-i18n="rsvp.surname">Cognoms*</label>
+                    <input type="text" id="apellidos" name="apellidos" required>
+                </div>
+                
+                <div class="form-group">
+                    <label data-i18n="rsvp.attendLabel">Vindràs el 18 d'octubre?*</label>
+                    <div class="radio-group">
+                        <label class="radio-option">
+                            <input type="radio" name="asistencia" value="Sí, hi assistiré" required>
+                            <span class="radio-custom"></span>
+                            <span data-i18n="rsvp.attendYes">Sí, hi assistiré</span>
+                        </label>
+                        <label class="radio-option">
+                            <input type="radio" name="asistencia" value="No, no hi podré assistir" required>
+                            <span class="radio-custom"></span>
+                            <span data-i18n="rsvp.attendNo">No, no hi podré assistir</span>
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="form-group" id="tipusAssistenciaGroup">
+                    <label data-i18n="rsvp.typeLabel">A què vindré?*</label>
+                    <div class="radio-group">
+                        <label class="radio-option">
+                            <input type="radio" name="tipusAssistencia" value="Vindré només a la cerimònia" required>
+                            <span class="radio-custom"></span>
+                            <span data-i18n="rsvp.typeCeremony">Vindré només a la cerimònia</span>
+                        </label>
+                        <label class="radio-option">
+                            <input type="radio" name="tipusAssistencia" value="Vindré a la cerimònia i a la celebració" required>
+                            <span class="radio-custom"></span>
+                            <span data-i18n="rsvp.typeBoth">Vindré a la cerimònia i a la celebració</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-group" id="platoGroup">
+                    <label data-i18n="rsvp.dishLabel">Elecció de plat*</label>
+                    <div class="radio-group">
+                        <label class="radio-option">
+                            <input type="radio" name="plato" value="Entrecot de Girona" required>
+                            <span class="radio-custom"></span>
+                            <span data-i18n="rsvp.dishMeat">Entrecot de Girona</span>
+                        </label>
+                        <label class="radio-option">
+                            <input type="radio" name="plato" value="Suprema de Dorada" required>
+                            <span class="radio-custom"></span>
+                            <span data-i18n="rsvp.dishFish">Suprema de Dorada</span>
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="intolerancias" data-i18n="rsvp.allergies">Intoleràncies i al·lèrgies alimentàries</label>
+                    <textarea id="intolerancias" name="intolerancias" rows="3"></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="cancion" data-i18n="rsvp.song">Cançó que no pot faltar</label>
+                    <input type="text" id="cancion" name="cancion">
+                </div>
+                
+                <button type="submit" class="submit-btn" data-i18n="rsvp.submit">Enviar</button>
+            </form>
+            
+            <p class="rsvp-note" data-i18n="rsvp.deadline">*Us demanem que confirmeu abans del 10 de setembre de 2026</p>
+        </div>
+    </section>
+
+    <!-- Gift Section -->
+    <section class="gift" id="regalo">
+        <div class="container">
+            <p data-i18n="gift.text">El millor regal per a nosaltres és poder compartir aquest dia tan especial amb tots vosaltres. Tanmateix, si us fa il·lusió col·laborar amb les despeses de la celebració o ajudar-nos a posar la primera pedra al nostre nou projecte de vida, us deixem aquí el nostre número de compte. Recordeu que és totalment opcional: la vostra presència és el que realment compta per a nosaltres!</p>
+            <div class="bank-account">
+                <span class="bank-number">ES86 0186 1001 9105 2938 2003</span>
+                <button type="button" class="copy-btn" onclick="copyToClipboard('ES8601861001910529382003')">
+                    <i class="fas fa-copy" aria-hidden="true"></i>
+                    <span data-i18n="gift.copy">Copia</span>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-main">
+                    <h3><a href="#" onclick="scrollToTop(); return false;"><img src="Logo_Blanco.png" alt="M&P" class="footer-logo"></a><br><span class="footer-date" data-i18n="footer.date">18 d'octubre de 2026</span></h3>
+                    <div class="contact-info">
+                        <div class="contact-item">
+                            <span class="contact-name">Maria</span>
+                            <span class="contact-phone">618 459 224</span>
+                        </div>
+                        <div class="contact-item">
+                            <span class="contact-name">Pep</span>
+                            <span class="contact-phone">622 894 895</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="footer-bottom">
+                    <p data-i18n="footer.credit">&copy; 2026 Creat per M&P</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
