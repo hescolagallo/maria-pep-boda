@@ -961,6 +961,56 @@ h3 {
     text-align: center;
 }
 
+/* Photos */
+.photos {
+    padding: 5rem 0;
+    background: #ede9dd;
+    text-align: center;
+}
+
+.photos h2 {
+    font-family: 'Autography', 'Playfair Display', serif;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    margin-bottom: 1.5rem;
+    color: #5170FF;
+}
+
+.photos p {
+    font-size: 1.15rem;
+    color: #333;
+    margin-bottom: 2rem;
+    line-height: 1.6;
+    max-width: 640px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.photos-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.9rem 2rem;
+    background: #5170FF;
+    color: #ede9dd;
+    text-decoration: none;
+    border-radius: 50px;
+    font-size: 1.05rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.photos-btn:hover {
+    background: #3d5ae6;
+    color: #ede9dd;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(81, 112, 255, 0.3);
+}
+
+.photos-btn i {
+    font-size: 1.1rem;
+}
+
 .gift h2 {
     font-family: 'Autography', 'Playfair Display', serif;
     font-weight: 100;
@@ -1749,6 +1799,19 @@ h3 {
     
     .gift {
         padding: 3rem 0;
+    }
+
+    .photos {
+        padding: 3rem 0;
+    }
+
+    .photos h2 {
+        font-size: 2.5rem;
+    }
+
+    .photos p {
+        font-size: 1rem;
+        padding: 0 1rem;
     }
     
     .recommendations {
