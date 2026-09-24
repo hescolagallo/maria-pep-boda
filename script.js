@@ -71,6 +71,7 @@ const translations = {
         'photos.tooLarge': 'La foto és massa gran (màx. 15 MB)',
         'photos.invalidType': 'Només es permeten imatges',
         'photos.notConfigured': 'La pujada encara no està configurada. Contacta amb Maria i Pep.',
+        'photos.accessDenied': 'El servidor de fotos encara no està obert al públic. Cal activar "Cualquiera" al Google Apps Script.',
         'photos.allDone': 'Gràcies! Totes les fotos s\'han pujat correctament.',
         'photos.partialDone': 'Algunes fotos no s\'han pogut pujar. Torna-ho a provar.',
         'footer.date': "18 d'octubre de 2026",
@@ -132,6 +133,7 @@ const translations = {
         'photos.tooLarge': 'A foto é muito grande (máx. 15 MB)',
         'photos.invalidType': 'Apenas imagens são permitidas',
         'photos.notConfigured': 'O envio ainda não está configurado. Entre em contato com Maria e Pep.',
+        'photos.accessDenied': 'O servidor de fotos ainda não está aberto ao público. É preciso ativar "Qualquer pessoa" no Google Apps Script.',
         'photos.allDone': 'Obrigado! Todas as fotos foram enviadas com sucesso.',
         'photos.partialDone': 'Algumas fotos não puderam ser enviadas. Tente novamente.',
         'footer.date': '18 de outubro de 2026',
@@ -755,26 +757,10 @@ window.addEventListener('scroll', optimizedScrollHandler);
 function initPhotoUpload() {
     const dropzone = document.getElementById('photoDropzone');
     const fileInput = document.getElementById('photoInput');
-    const selectBtn = document.getElementById('photoSelectBtn');
     const uploadList = document.getElementById('photoUploadList');
     const uploadStatus = document.getElementById('photoUploadStatus');
 
     if (!dropzone || !fileInput || !uploadList || !uploadStatus) return;
-
-    const openFilePicker = () => fileInput.click();
-
-    selectBtn.addEventListener('click', (event) => {
-        event.stopPropagation();
-        openFilePicker();
-    });
-
-    dropzone.addEventListener('click', openFilePicker);
-    dropzone.addEventListener('keydown', (event) => {
-        if (event.key === 'Enter' || event.key === ' ') {
-            event.preventDefault();
-            openFilePicker();
-        }
-    });
 
     fileInput.addEventListener('change', () => {
         if (fileInput.files && fileInput.files.length) {
@@ -857,6 +843,20 @@ function createPhotoUploadItem(file) {
     return { item, state, progressBar, thumbUrl: thumb.src };
 }
 
+async function parseUploadResponse(response) {
+    const text = await response.text();
+
+    if (!response.ok || text.trim().startsWith('<!')) {
+        throw new Error('access_denied');
+    }
+
+    try {
+        return JSON.parse(text);
+    } catch (error) {
+        throw new Error('invalid_response');
+    }
+}
+
 async function uploadPhotoFile(file, stateEl, progressBar) {
     if (!PHOTO_UPLOAD_URL) {
         throw new Error('not_configured');
@@ -891,7 +891,7 @@ async function uploadPhotoFile(file, stateEl, progressBar) {
 
     progressBar.style.width = '100%';
 
-    const result = await response.json();
+    const result = await parseUploadResponse(response);
     if (!result.success) {
         throw new Error(result.error || 'upload_failed');
     }
@@ -921,6 +921,8 @@ async function handlePhotoFiles(files, uploadList, uploadStatus) {
 
             if (error.message === 'not_configured') {
                 state.textContent = t('photos.notConfigured');
+            } else if (error.message === 'access_denied') {
+                state.textContent = t('photos.accessDenied');
             } else if (error.message === 'too_large') {
                 state.textContent = t('photos.tooLarge');
             } else if (error.message === 'invalid_type') {

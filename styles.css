@@ -1017,12 +1017,30 @@ h3 {
 }
 
 .photo-dropzone {
+    position: relative;
     border: 2px dashed rgba(81, 112, 255, 0.45);
     border-radius: 20px;
     padding: 2.5rem 1.5rem;
     background: rgba(255, 255, 255, 0.55);
     transition: border-color 0.25s ease, background-color 0.25s ease, transform 0.2s ease;
     cursor: pointer;
+    overflow: hidden;
+}
+
+.photo-input-overlay {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+    z-index: 2;
+}
+
+.photo-dropzone-content {
+    position: relative;
+    z-index: 1;
+    pointer-events: none;
 }
 
 .photo-dropzone:hover,
@@ -1054,8 +1072,8 @@ h3 {
 }
 
 .photo-select-btn {
-    border: none;
-    cursor: pointer;
+    display: inline-flex;
+    pointer-events: none;
 }
 
 .photo-upload-list {
