@@ -85,7 +85,7 @@
                     <img src="Celebracion.jpg" alt="Turó del Sol" class="venue-img">
                 </div>
                 <h2 data-i18n="celebration.title">Celebració</h2>
-                <div class="time">14:00 h</div>
+                <div class="time">14/14:30 h</div>
                 <div class="location">
                     <span data-i18n="celebration.locationLine1">Turó</span><br>
                     <span data-i18n="celebration.locationLine2">del Sol</span>
@@ -113,17 +113,14 @@
                         <img src="Celebracion-icon.png" alt="" class="icon-img" aria-hidden="true">
                     </div>
                     <h3 data-i18n="celebration.title">Celebració</h3>
-                    <div class="time">14:00 h</div>
+                    <div class="time">14/14:30 h</div>
                 </div>
                 <div class="schedule-item">
                     <div class="schedule-icon">
                         <img src="Cierre.png" alt="" class="icon-img" aria-hidden="true">
                     </div>
                     <h3 data-i18n="schedule.closing">Tancament</h3>
-                    <div class="time-closing">
-                        <span class="time-main">21 h</span>
-                        <span class="time-note" data-i18n="schedule.closingApprox">aproximadament</span>
-                    </div>
+                    <div class="time">22/23 h</div>
                 </div>
             </div>
         </div>
@@ -232,10 +229,28 @@
     <section class="photos" id="fotos">
         <div class="container">
             <h2 data-i18n="photos.title">Comparteix les teves fotos</h2>
-            <p data-i18n="photos.text">Durant el casament, fes fotos amb el mòbil i puja-les a la nostra carpeta compartida. Així podrem guardar tots els records d'aquest dia junts!</p>
-            <a href="https://drive.google.com/drive/folders/1voqDfkZA7OINinimLAFQ0u2tVxyepVus?usp=sharing" target="_blank" rel="noopener noreferrer" class="photos-btn">
-                <i class="fas fa-camera" aria-hidden="true"></i>
-                <span data-i18n="photos.button">Pujar fotos</span>
+            <p data-i18n="photos.text">Durant el casament, fes fotos amb el mòbil i puja-les aquí. S'guardaran directament a la nostra carpeta compartida!</p>
+
+            <div class="photo-uploader" id="photoUploader">
+                <input type="file" id="photoInput" class="photo-input" accept="image/*" multiple hidden>
+
+                <div class="photo-dropzone" id="photoDropzone" role="button" tabindex="0" aria-label="Pujar fotos">
+                    <i class="fas fa-cloud-upload-alt photo-dropzone-icon" aria-hidden="true"></i>
+                    <p class="photo-dropzone-title" data-i18n="photos.dropTitle">Arrossega les teves fotos aquí</p>
+                    <p class="photo-dropzone-hint" data-i18n="photos.dropHint">o fes clic per triar-les des del mòbil o l'ordinador</p>
+                    <button type="button" class="photos-btn photo-select-btn" id="photoSelectBtn">
+                        <i class="fas fa-camera" aria-hidden="true"></i>
+                        <span data-i18n="photos.button">Triar fotos</span>
+                    </button>
+                </div>
+
+                <div class="photo-upload-list" id="photoUploadList" hidden></div>
+                <p class="photo-upload-status" id="photoUploadStatus" hidden></p>
+            </div>
+
+            <a href="https://drive.google.com/drive/folders/1voqDfkZA7OINinimLAFQ0u2tVxyepVus?usp=sharing" target="_blank" rel="noopener noreferrer" class="photos-folder-link">
+                <i class="fas fa-folder-open" aria-hidden="true"></i>
+                <span data-i18n="photos.folderLink">Veure la carpeta compartida</span>
             </a>
         </div>
     </section>

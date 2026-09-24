@@ -8,7 +8,12 @@ document.addEventListener('DOMContentLoaded', function() {
     initAnimations();
     initCopyToClipboard();
     initScrollEffects();
+    initPhotoUpload();
 });
+
+// URL del Google Apps Script desplegado (ver google-apps-script/SubirFotos.gs)
+const PHOTO_UPLOAD_URL = 'https://script.google.com/macros/s/AKfycbxwKgNjAofrbPsI5GzbZrl5v4ycioI05HTUJCOfyV4wQ5A1vq3hYyAIwfkTLOCr9fI/exec';
+const PHOTO_MAX_SIZE_MB = 15;
 
 const translations = {
     ca: {
@@ -55,8 +60,19 @@ const translations = {
         'gift.copy': 'Copia',
         'gift.copied': 'Copiat!',
         'photos.title': 'Comparteix les teves fotos',
-        'photos.text': "Durant el casament, fes fotos amb el mòbil i puja-les a la nostra carpeta compartida. Així podrem guardar tots els records d'aquest dia junts!",
-        'photos.button': 'Pujar fotos',
+        'photos.text': "Durant el casament, fes fotos amb el mòbil i puja-les aquí. S'guardaran directament a la nostra carpeta compartida!",
+        'photos.dropTitle': 'Arrossega les teves fotos aquí',
+        'photos.dropHint': "o fes clic per triar-les des del mòbil o l'ordinador",
+        'photos.button': 'Triar fotos',
+        'photos.folderLink': 'Veure la carpeta compartida',
+        'photos.uploading': 'Pujant...',
+        'photos.uploaded': 'Pujada correctament',
+        'photos.failed': 'Error en pujar',
+        'photos.tooLarge': 'La foto és massa gran (màx. 15 MB)',
+        'photos.invalidType': 'Només es permeten imatges',
+        'photos.notConfigured': 'La pujada encara no està configurada. Contacta amb Maria i Pep.',
+        'photos.allDone': 'Gràcies! Totes les fotos s\'han pujat correctament.',
+        'photos.partialDone': 'Algunes fotos no s\'han pogut pujar. Torna-ho a provar.',
         'footer.date': "18 d'octubre de 2026",
         'footer.credit': '© 2026 Creat per M&P',
         'lang.aria': 'Canviar a portuguès'
@@ -105,8 +121,19 @@ const translations = {
         'gift.copy': 'Copiar',
         'gift.copied': 'Copiado!',
         'photos.title': 'Compartilhe suas fotos',
-        'photos.text': 'Durante o casamento, tire fotos com o celular e envie-as para a nossa pasta compartilhada. Assim guardaremos juntos todas as memórias deste dia!',
-        'photos.button': 'Enviar fotos',
+        'photos.text': 'Durante o casamento, tire fotos com o celular e envie-as aqui. Elas serão salvas diretamente na nossa pasta compartilhada!',
+        'photos.dropTitle': 'Arraste suas fotos aqui',
+        'photos.dropHint': 'ou clique para escolher do celular ou do computador',
+        'photos.button': 'Escolher fotos',
+        'photos.folderLink': 'Ver pasta compartilhada',
+        'photos.uploading': 'Enviando...',
+        'photos.uploaded': 'Enviada com sucesso',
+        'photos.failed': 'Erro ao enviar',
+        'photos.tooLarge': 'A foto é muito grande (máx. 15 MB)',
+        'photos.invalidType': 'Apenas imagens são permitidas',
+        'photos.notConfigured': 'O envio ainda não está configurado. Entre em contato com Maria e Pep.',
+        'photos.allDone': 'Obrigado! Todas as fotos foram enviadas com sucesso.',
+        'photos.partialDone': 'Algumas fotos não puderam ser enviadas. Tente novamente.',
         'footer.date': '18 de outubro de 2026',
         'footer.credit': '© 2026 Criado por M&P',
         'lang.aria': 'Mudar para catalão'
@@ -724,6 +751,205 @@ const optimizedScrollHandler = debounce(function() {
 
 // Add scroll event listener with optimization
 window.addEventListener('scroll', optimizedScrollHandler);
+
+function initPhotoUpload() {
+    const dropzone = document.getElementById('photoDropzone');
+    const fileInput = document.getElementById('photoInput');
+    const selectBtn = document.getElementById('photoSelectBtn');
+    const uploadList = document.getElementById('photoUploadList');
+    const uploadStatus = document.getElementById('photoUploadStatus');
+
+    if (!dropzone || !fileInput || !uploadList || !uploadStatus) return;
+
+    const openFilePicker = () => fileInput.click();
+
+    selectBtn.addEventListener('click', (event) => {
+        event.stopPropagation();
+        openFilePicker();
+    });
+
+    dropzone.addEventListener('click', openFilePicker);
+    dropzone.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter' || event.key === ' ') {
+            event.preventDefault();
+            openFilePicker();
+        }
+    });
+
+    fileInput.addEventListener('change', () => {
+        if (fileInput.files && fileInput.files.length) {
+            handlePhotoFiles(Array.from(fileInput.files), uploadList, uploadStatus);
+            fileInput.value = '';
+        }
+    });
+
+    ['dragenter', 'dragover'].forEach((eventName) => {
+        dropzone.addEventListener(eventName, (event) => {
+            event.preventDefault();
+            dropzone.classList.add('is-dragover');
+        });
+    });
+
+    ['dragleave', 'drop'].forEach((eventName) => {
+        dropzone.addEventListener(eventName, (event) => {
+            event.preventDefault();
+            dropzone.classList.remove('is-dragover');
+        });
+    });
+
+    dropzone.addEventListener('drop', (event) => {
+        const files = Array.from(event.dataTransfer.files || []);
+        if (files.length) {
+            handlePhotoFiles(files, uploadList, uploadStatus);
+        }
+    });
+}
+
+function isValidPhotoFile(file) {
+    return file.type.startsWith('image/') || /\.(jpe?g|png|gif|webp|heic|heif)$/i.test(file.name);
+}
+
+function readFileAsBase64(file) {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => {
+            const result = reader.result || '';
+            const base64 = String(result).split(',')[1] || '';
+            resolve(base64);
+        };
+        reader.onerror = () => reject(new Error('read_failed'));
+        reader.readAsDataURL(file);
+    });
+}
+
+function createPhotoUploadItem(file) {
+    const item = document.createElement('div');
+    item.className = 'photo-upload-item';
+
+    const thumb = document.createElement('img');
+    thumb.className = 'photo-upload-thumb';
+    thumb.alt = '';
+    thumb.src = URL.createObjectURL(file);
+
+    const meta = document.createElement('div');
+    meta.className = 'photo-upload-meta';
+
+    const name = document.createElement('span');
+    name.className = 'photo-upload-name';
+    name.textContent = file.name;
+
+    const state = document.createElement('span');
+    state.className = 'photo-upload-state';
+    state.textContent = t('photos.uploading');
+
+    const progress = document.createElement('div');
+    progress.className = 'photo-upload-progress';
+    const progressBar = document.createElement('div');
+    progressBar.className = 'photo-upload-progress-bar';
+    progress.appendChild(progressBar);
+
+    meta.appendChild(name);
+    meta.appendChild(state);
+    meta.appendChild(progress);
+    item.appendChild(thumb);
+    item.appendChild(meta);
+
+    return { item, state, progressBar, thumbUrl: thumb.src };
+}
+
+async function uploadPhotoFile(file, stateEl, progressBar) {
+    if (!PHOTO_UPLOAD_URL) {
+        throw new Error('not_configured');
+    }
+
+    if (!isValidPhotoFile(file)) {
+        throw new Error('invalid_type');
+    }
+
+    if (file.size > PHOTO_MAX_SIZE_MB * 1024 * 1024) {
+        throw new Error('too_large');
+    }
+
+    stateEl.classList.add('is-uploading');
+    stateEl.textContent = t('photos.uploading');
+    progressBar.style.width = '35%';
+
+    const base64 = await readFileAsBase64(file);
+    progressBar.style.width = '65%';
+
+    const response = await fetch(PHOTO_UPLOAD_URL, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'text/plain;charset=utf-8'
+        },
+        body: JSON.stringify({
+            fileName: file.name,
+            mimeType: file.type || 'image/jpeg',
+            file: base64
+        })
+    });
+
+    progressBar.style.width = '100%';
+
+    const result = await response.json();
+    if (!result.success) {
+        throw new Error(result.error || 'upload_failed');
+    }
+}
+
+async function handlePhotoFiles(files, uploadList, uploadStatus) {
+    uploadList.hidden = false;
+    uploadStatus.hidden = true;
+    uploadStatus.className = 'photo-upload-status';
+
+    let successCount = 0;
+    let errorCount = 0;
+
+    for (const file of files) {
+        const { item, state, progressBar, thumbUrl } = createPhotoUploadItem(file);
+        uploadList.appendChild(item);
+
+        try {
+            await uploadPhotoFile(file, state, progressBar);
+            state.classList.remove('is-uploading');
+            state.classList.add('is-success');
+            state.textContent = t('photos.uploaded');
+            successCount += 1;
+        } catch (error) {
+            state.classList.remove('is-uploading');
+            state.classList.add('is-error');
+
+            if (error.message === 'not_configured') {
+                state.textContent = t('photos.notConfigured');
+            } else if (error.message === 'too_large') {
+                state.textContent = t('photos.tooLarge');
+            } else if (error.message === 'invalid_type') {
+                state.textContent = t('photos.invalidType');
+            } else {
+                state.textContent = t('photos.failed');
+            }
+
+            progressBar.style.width = '0';
+            errorCount += 1;
+        } finally {
+            URL.revokeObjectURL(thumbUrl);
+        }
+    }
+
+    if (successCount || errorCount) {
+        uploadStatus.hidden = false;
+        if (errorCount === 0) {
+            uploadStatus.classList.add('is-success');
+            uploadStatus.textContent = t('photos.allDone');
+        } else if (successCount === 0) {
+            uploadStatus.classList.add('is-error');
+            uploadStatus.textContent = t('photos.partialDone');
+        } else {
+            uploadStatus.classList.add('is-error');
+            uploadStatus.textContent = t('photos.partialDone');
+        }
+    }
+}
 
 // Scroll to top function
 function scrollToTop() {
