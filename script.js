@@ -60,7 +60,7 @@ const translations = {
         'gift.copy': 'Copia',
         'gift.copied': 'Copiat!',
         'photos.title': 'Comparteix les teves fotos',
-        'photos.text': "Durant el casament, fes fotos amb el mòbil i puja-les aquí. S'guardaran directament a la nostra carpeta compartida!",
+        'photos.text': "Durant el casament, fes fotos amb el mòbil i puja-les aquí. Es guardaran directament a la nostra carpeta compartida!",
         'photos.dropTitle': 'Arrossega les teves fotos aquí',
         'photos.dropHint': "o fes clic per triar-les des del mòbil o l'ordinador",
         'photos.button': 'Triar fotos',
